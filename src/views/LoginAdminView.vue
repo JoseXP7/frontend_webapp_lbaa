@@ -4,9 +4,11 @@ import { ref } from 'vue'
 import api from '../config/api'
 import { useRouter } from 'vue-router'
 import { useToken } from '../assets/composables/useToken'
+import { useUser } from '../assets/composables/useUser'
 import Swal from 'sweetalert2'
 
 const { saveToken } = useToken()
+const { saveUser } = useUser()
 
 const router = useRouter()
 let username = ref('')
@@ -25,7 +27,8 @@ const login = async () => {
       showConfirmButton: false,
       timer: 3500,
     })
-    saveToken(data.body)
+    saveToken(data.body.token)
+    saveUser(data.body.userId)
     router.push('/dashboard')
   } catch (error) {
     Swal.fire({

@@ -1,4 +1,6 @@
 // import { ref } from "vue"
+import { useUser } from '@/assets/composables/useUser'
+const { deleteUser } = useUser()
 
 // const token = ref("")
 import { useRouter } from 'vue-router'
@@ -23,6 +25,7 @@ export function useToken() {
   const signOut = () => {
     //elimina el token de local storage y manda al login
     localStorage.removeItem('token')
+    deleteUser()
     Swal.fire({
       title: 'Sesión finalizada',
       icon: 'info',

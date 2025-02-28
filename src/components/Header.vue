@@ -1,5 +1,14 @@
 <script setup>
 import { RouterLink } from 'vue-router'
+import { ref } from 'vue'
+
+const isMobileNavActive = ref(false)
+const isMobileView = window.innerWidth <= 768 ? true : false
+
+const toggleMobileNav = () => {
+  document.body.classList.toggle('mobile-nav-active')
+  isMobileNavActive.value = !isMobileNavActive.value
+}
 </script>
 
 <template>
@@ -8,7 +17,6 @@ import { RouterLink } from 'vue-router'
       class="container-fluid container-xl position-relative d-flex align-items-center"
     >
       <RouterLink to="/" class="logo d-flex align-items-center me-auto">
-        <!-- Uncomment the line below if you also wish to use an image logo -->
         <img src="../assets/images/logo.jpg" alt="" />
         <h1 class="sitename">L.B ANTONIO ÁLAMO</h1>
       </RouterLink>
@@ -22,11 +30,21 @@ import { RouterLink } from 'vue-router'
           <li><RouterLink to="/sections">Secciones</RouterLink></li>
           <li><RouterLink to="/">Contacto</RouterLink></li>
         </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        <i
+          :class="[
+            'mobile-nav-toggle',
+            'd-xl-none',
+            isMobileNavActive ? 'bi-x' : 'bi-list',
+          ]"
+          @click="toggleMobileNav"
+        ></i>
       </nav>
 
       <RouterLink class="btn-getstarted" to="/login"
-        ><i class="bi bi-person"></i> Dashboard</RouterLink
+        ><i
+          :class="['bi', 'bi-person', isMobileView ? 'd-none' : 'd-inline']"
+        ></i>
+        Dashboard</RouterLink
       >
     </div>
   </header>

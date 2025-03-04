@@ -14,17 +14,27 @@ const { getToken } = useToken()
 let cedula = ref('')
 let nombres = ref('')
 let apellidos = ref('')
+let isLoading = ref(false)
 
 const addEstudiante = async () => {
   if (cedula.value == '' || nombres.value == '' || apellidos.value == '') {
     alert('Campos Vacios')
   } else {
+    isLoading.value = true
     try {
-      await api.post('/estudiantes', {
-        cedula: Number(cedula.value),
-        nombres: nombres.value,
-        apellidos: apellidos.value,
-      })
+      await api.post(
+        '/estudiantes',
+        {
+          cedula: Number(cedula.value),
+          nombres: nombres.value.toUpperCase(),
+          apellidos: apellidos.value.toUpperCase(),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
+        }
+      )
       Swal.fire({
         icon: 'success',
         title: 'Estudiante Agregado',
@@ -34,7 +44,13 @@ const addEstudiante = async () => {
       nombres.value = ''
       apellidos.value = ''
     } catch (error) {
-      console.error(error)
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error.response.data.body,
+      })
+    } finally {
+      isLoading.value = false
     }
   }
 }
@@ -59,7 +75,7 @@ onMounted(() => {
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Rellene los campos:</h5>
-              <form @submit.prevent="onSubmit">
+              <form @submit.prevent="onSubmit" autocomplete="off">
                 <div>
                   <label class="form-label" for="cedula">Cedula</label>
                   <input
@@ -94,7 +110,11 @@ onMounted(() => {
                   />
                 </div>
                 <div class="mt-4 d-grid">
-                  <button class="btn btn-primary" @click="addEstudiante">
+                  <button
+                    class="btn btn-primary"
+                    @click="addEstudiante"
+                    :disabled="isLoading"
+                  >
                     Agregar
                   </button>
                 </div>

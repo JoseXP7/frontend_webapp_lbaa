@@ -4,9 +4,12 @@ import SidebarDashboard from '@/components/SidebarDashboard.vue'
 import { ref, onMounted } from 'vue'
 import api from '../config/api'
 import { useToken } from '../assets/composables/useToken'
+import { useUser } from '../assets/composables/useUser'
 import Swal from 'sweetalert2'
 
 const { getToken } = useToken()
+const { getUser } = useUser()
+const userData = getUser()
 
 let secciones = ref([])
 let guias = ref([])
@@ -32,9 +35,56 @@ const getGuias = async () => {
   }
 }
 
+const delGuias = async (id) => {
+  try {
+    await api.delete(`/guias/${id}`, {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    })
+    Swal.fire({
+      icon: 'success',
+      title: 'Guía eliminada',
+      text: 'La guía ha sido eliminada correctamente',
+    })
+    getGuias()
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: error.response.data.body,
+    })
+  }
+}
+
+const questionDelete = (id) => {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: 'No podrás revertir esta acción!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#dc3545',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      delGuias(id)
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+      Swal.fire('La guia no ha sido eliminada', '', 'info')
+    }
+  })
+}
+
 const addGuia = async () => {
   if (guia.value == '' || seccion.value == '') {
-    alert('Campos Vacios')
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Todos los campos son obligatorios',
+      showConfirmButton: false,
+      timer: 3500,
+    })
   } else {
     try {
       await api.post(
@@ -162,6 +212,13 @@ onMounted(() => {
                     <th>ID</th>
                     <th>URL</th>
                     <th>Nombres</th>
+                    <th
+                      v-if="
+                        userData.rol === 'supersu' || userData.rol === 'admin'
+                      "
+                    >
+                      Acción
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -171,6 +228,18 @@ onMounted(() => {
                       <a :href="guia.url">{{ guia.url }}</a>
                     </td>
                     <td>{{ guia.nombre }}</td>
+                    <td
+                      v-if="
+                        userData.rol === 'supersu' || userData.rol === 'admin'
+                      "
+                    >
+                      <button
+                        class="btn btn-danger"
+                        @click="questionDelete(guia.id)"
+                      >
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </td>
                   </tr>
                 </tbody>
               </table>

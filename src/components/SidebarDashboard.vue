@@ -1,5 +1,10 @@
 <script setup>
 import { RouterLink } from 'vue-router'
+import { useUser } from '@/assets/composables/useUser'
+
+const { getUser } = useUser()
+
+const userData = getUser()
 </script>
 
 <template>
@@ -33,15 +38,10 @@ import { RouterLink } from 'vue-router'
               <i class="bi bi-circle"></i><span>Listar</span>
             </RouterLink>
           </li>
-          <li>
+          <li v-if="userData.rol === 'admin' || userData.rol === 'supersu'">
             <RouterLink to="/addSection">
               <i class="bi bi-circle"></i><span>Crear Sección</span>
             </RouterLink>
-          </li>
-          <li>
-            <a href="charts-apexcharts.html">
-              <i class="bi bi-circle"></i><span>Eliminar Sección</span>
-            </a>
           </li>
         </ul>
       </li>
@@ -67,26 +67,29 @@ import { RouterLink } from 'vue-router'
               <i class="bi bi-circle"></i><span>Listar</span>
             </RouterLink>
           </li>
-          <li>
+          <li v-if="userData.rol === 'admin' || userData.rol === 'supersu'">
             <RouterLink to="/addStudent">
               <i class="bi bi-circle"></i><span>Ingresar Estudiantes</span>
             </RouterLink>
           </li>
-          <li>
+          <li v-if="userData.rol === 'admin' || userData.rol === 'supersu'">
             <RouterLink to="/uptStudent">
               <i class="bi bi-circle"></i><span>Actualizar Estudiantes</span>
             </RouterLink>
           </li>
-          <li>
-            <a href="charts-apexcharts.html">
+          <li v-if="userData.rol === 'admin' || userData.rol === 'supersu'">
+            <RouterLink to="/deleteStudent">
               <i class="bi bi-circle"></i><span>Eliminar Estudiantes</span>
-            </a>
+            </RouterLink>
           </li>
         </ul>
       </li>
       <!-- End Sections Nav -->
 
-      <li class="nav-item">
+      <li
+        class="nav-item"
+        v-if="userData.rol === 'admin' || userData.rol === 'supersu'"
+      >
         <a
           class="nav-link collapsed"
           data-bs-target="#docentes-nav"
@@ -116,11 +119,19 @@ import { RouterLink } from 'vue-router'
               <i class="bi bi-circle"></i><span>Actualizar Docente</span>
             </RouterLink>
           </li>
+          <li>
+            <RouterLink to="/deleteDocente">
+              <i class="bi bi-circle"></i><span>Eliminar Docentes</span>
+            </RouterLink>
+          </li>
         </ul>
       </li>
       <!-- End Sections Nav -->
 
-      <li class="nav-item">
+      <li
+        class="nav-item"
+        v-if="userData.rol === 'admin' || userData.rol === 'supersu'"
+      >
         <a
           class="nav-link collapsed"
           data-bs-target="#admin-nav"
@@ -150,11 +161,19 @@ import { RouterLink } from 'vue-router'
               <i class="bi bi-circle"></i><span>Actualizar Administrativo</span>
             </RouterLink>
           </li>
+          <li>
+            <RouterLink to="/deleteAdministrativo">
+              <i class="bi bi-circle"></i><span>Eliminar Administrativos</span>
+            </RouterLink>
+          </li>
         </ul>
       </li>
       <!-- End Sections Nav -->
 
-      <li class="nav-item">
+      <li
+        class="nav-item"
+        v-if="userData.rol === 'admin' || userData.rol === 'supersu'"
+      >
         <a
           class="nav-link collapsed"
           data-bs-target="#obreros-nav"
@@ -184,11 +203,19 @@ import { RouterLink } from 'vue-router'
               <i class="bi bi-circle"></i><span>Actualizar Obrero</span>
             </RouterLink>
           </li>
+          <li>
+            <RouterLink to="/deleteObrero">
+              <i class="bi bi-circle"></i><span>Eliminar Obreros</span>
+            </RouterLink>
+          </li>
         </ul>
       </li>
       <!-- End Sections Nav -->
 
-      <li class="nav-item">
+      <li
+        class="nav-item"
+        v-if="userData.rol === 'admin' || userData.rol === 'supersu'"
+      >
         <a
           class="nav-link collapsed"
           data-bs-target="#vigilantes-nav"
@@ -218,11 +245,19 @@ import { RouterLink } from 'vue-router'
               <i class="bi bi-circle"></i><span>Actualizar Vigilante</span>
             </RouterLink>
           </li>
+          <li>
+            <RouterLink to="/deleteVigilante">
+              <i class="bi bi-circle"></i><span>Eliminar Vigilantes</span>
+            </RouterLink>
+          </li>
         </ul>
       </li>
       <!-- End Sections Nav -->
 
-      <li class="nav-item">
+      <li
+        class="nav-item"
+        v-if="userData.rol === 'admin' || userData.rol === 'supersu'"
+      >
         <a
           class="nav-link collapsed"
           data-bs-target="#cocineros-nav"
@@ -252,6 +287,11 @@ import { RouterLink } from 'vue-router'
               <i class="bi bi-circle"></i><span>Actualizar Cocinero</span>
             </RouterLink>
           </li>
+          <li>
+            <RouterLink to="/deleteCocineros">
+              <i class="bi bi-circle"></i><span>Eliminar Cocinero</span>
+            </RouterLink>
+          </li>
         </ul>
       </li>
       <!-- End Sections Nav -->
@@ -262,6 +302,12 @@ import { RouterLink } from 'vue-router'
         <RouterLink class="nav-link collapsed" to="/uploadTask">
           <i class="bi bi-file-earmark-arrow-up"></i>
           <span>Subir Guía</span>
+        </RouterLink>
+      </li>
+      <li class="nav-item" v-if="userData.rol === 'supersu'">
+        <RouterLink class="nav-link collapsed" to="/createUser">
+          <i class="bi bi-person-plus"></i>
+          <span>Registrar Usuario</span>
         </RouterLink>
       </li>
       <!-- End Profile Page Nav -->

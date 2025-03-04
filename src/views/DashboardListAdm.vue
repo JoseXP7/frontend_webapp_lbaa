@@ -3,6 +3,7 @@ import { useToken } from '../assets/composables/useToken'
 import { onMounted, ref } from 'vue'
 import HeaderDashboard from '@/components/HeaderDashboard.vue'
 import SidebarDashboard from '@/components/SidebarDashboard.vue'
+import { convertPDF } from '@/assets/composables/convertPDF'
 
 import api from '../config/api'
 
@@ -38,6 +39,29 @@ const getUnAdministrativo = async () => {
       console.log(error)
     }
   }
+}
+
+const convertirPDF = () => {
+  let asunto
+  Swal.fire({
+    title: 'Asunto del PDF',
+    input: 'text',
+    inputAttributes: {
+      autocapitalize: 'off',
+    },
+    showCancelButton: true,
+    confirmButtonText: 'Descargar',
+    showLoaderOnConfirm: true,
+    preConfirm: (asunto) => {
+      convertPDF(
+        'ADMINISTRATIVO',
+        asunto,
+        'Lista_de_Administrativos',
+        administrativos.value
+      )
+    },
+    allowOutsideClick: () => !Swal.isLoading(),
+  })
 }
 
 const clear = () => {
@@ -106,10 +130,11 @@ onMounted(() => {
         <div class="col-lg-4">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Example Card</h5>
+              <h5 class="card-title">Descargar</h5>
               <p>
-                This is an examle page with no contrnt. You can use it as a
-                starter for your custom pages.
+                <button class="btn btn-primary" @click="convertirPDF">
+                  <i class="bi bi-filetype-pdf"></i> Descargar PDF
+                </button>
               </p>
             </div>
           </div>

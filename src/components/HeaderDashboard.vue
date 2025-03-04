@@ -8,9 +8,10 @@ import Swal from 'sweetalert2'
 const router = useRouter()
 
 const { getUser } = useUser()
-let user = getUser()
+let user = ref([])
 const nombre = ref('')
 const activo = ref(0)
+const rol = ref('')
 
 const { signOut } = useToken()
 function collapse() {
@@ -18,13 +19,21 @@ function collapse() {
   navMobile.classList.toggle('toggle-sidebar')
 }
 
+async function infoUser() {
+  //usa la funcion getUser del composable useUser para obtener la informacion del usuario de un JSON parseado
+  user.value = await getUser()
+  nombre.value = user.value.nombre
+  activo.value = user.value.activo
+  rol.value = user.value.rol
+}
+
 const logout = () => {
   signOut()
 }
 
-onMounted(async () => {
+onMounted(() => {
   //primero verificar si existe en localstorage el token
-  if (!localStorage.getItem('token')) {
+  if (!localStorage.getItem('token') || !localStorage.getItem('user')) {
     router.push('/login')
     Swal.fire({
       icon: 'error',
@@ -34,10 +43,7 @@ onMounted(async () => {
       timer: 3500,
     })
   } else {
-    await user.forEach((e) => {
-      nombre.value = e.nombre
-      activo.value = e.activo
-    })
+    infoUser()
   }
 })
 </script>
@@ -48,9 +54,9 @@ onMounted(async () => {
     class="header fixed-top d-flex align-items-center justify-content-between pe-5"
   >
     <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
+      <RouterLink to="/dashboard" class="logo d-flex align-items-center">
         <span class="d-none d-lg-block">Dashboard</span>
-      </a>
+      </RouterLink>
       <i class="bi bi-list toggle-sidebar-btn" @click="collapse"></i>
     </div>
     <!-- End Logo -->
@@ -78,20 +84,23 @@ onMounted(async () => {
           >
             <li class="dropdown-header">
               <h6>{{ nombre }}</h6>
-              <span>Estado: {{ activo ? 'Activo' : 'Inactivo' }}</span>
+              <span
+                >Estado: {{ activo ? 'Activo' : 'Inactivo' }} | Rol:
+                {{ rol }}</span
+              >
             </li>
             <li>
               <hr class="dropdown-divider" />
             </li>
 
             <li>
-              <a
+              <RouterLink
                 class="dropdown-item d-flex align-items-center"
-                href="users-profile.html"
+                to="/myprofile"
               >
                 <i class="bi bi-person"></i>
                 <span>Mi perfil</span>
-              </a>
+              </RouterLink>
             </li>
             <li>
               <hr class="dropdown-divider" />

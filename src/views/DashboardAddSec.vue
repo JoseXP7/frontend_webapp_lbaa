@@ -3,6 +3,7 @@ import { useToken } from '../assets/composables/useToken'
 import { onMounted, ref } from 'vue'
 import HeaderDashboard from '@/components/HeaderDashboard.vue'
 import SidebarDashboard from '@/components/SidebarDashboard.vue'
+import Swal from 'sweetalert2'
 
 import api from '../config/api'
 
@@ -11,12 +12,18 @@ const { getToken } = useToken()
 //Formuario
 let grado = ref('')
 let seccion = ref('')
+let isLoading = ref(false)
 
 const addSection = async () => {
   let name = grado.value + seccion.value
   if (grado.value == '' || seccion.value == '') {
-    alert('Campos Vacios')
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Campos Vacios',
+    })
   } else {
+    isLoading.value = true
     try {
       await api.post(
         '/cursos',
@@ -29,9 +36,21 @@ const addSection = async () => {
           },
         }
       )
-      alert(`Curso Agregado: ${name}`)
+      Swal.fire({
+        icon: 'success',
+        title: 'Curso Agregado',
+        text: `${name}`,
+      })
+      grado.value = ''
+      seccion.value = ''
     } catch (error) {
-      alert.error(error)
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error.response.data.body,
+      })
+    } finally {
+      isLoading.value = false
     }
   }
 }
@@ -59,7 +78,7 @@ onMounted(() => {
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Rellene los campos:</h5>
-              <form @submit.prevent="onSubmit">
+              <form @submit.prevent="onSubmit" autocomplete="off">
                 <div>
                   <label class="form-label" for="grado">Año:</label>
                   <select
@@ -101,7 +120,11 @@ onMounted(() => {
                 </div>
                 <div>Vista Previa: {{ grado }}{{ seccion }}</div>
                 <div class="mt-4 d-grid">
-                  <button class="btn btn-primary" @click="addSection">
+                  <button
+                    class="btn btn-primary"
+                    @click="addSection"
+                    :disabled="isLoading"
+                  >
                     Agregar
                   </button>
                 </div>

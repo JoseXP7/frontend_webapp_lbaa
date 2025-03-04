@@ -204,15 +204,30 @@ onMounted(() => {
                 </li>
                 <li class="list-group-item">
                   Cedula:
-                  <input class="form-control" type="text" v-model="cedula" />
+                  <input
+                    class="form-control"
+                    type="text"
+                    v-model="cedula"
+                    autocomplete="off"
+                  />
                 </li>
                 <li class="list-group-item">
                   Nombres:
-                  <input class="form-control" type="text" v-model="nombres" />
+                  <input
+                    class="form-control"
+                    type="text"
+                    v-model="nombres"
+                    autocomplete="off"
+                  />
                 </li>
                 <li class="list-group-item">
                   Apellidos:
-                  <input class="form-control" type="text" v-model="apellidos" />
+                  <input
+                    class="form-control"
+                    type="text"
+                    v-model="apellidos"
+                    autocomplete="off"
+                  />
                 </li>
                 <li class="list-group-item">
                   <button

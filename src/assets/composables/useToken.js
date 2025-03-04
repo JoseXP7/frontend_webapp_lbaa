@@ -2,24 +2,16 @@
 import { useUser } from '@/assets/composables/useUser'
 const { deleteUser } = useUser()
 
-// const token = ref("")
-import { useRouter } from 'vue-router'
 import Swal from 'sweetalert2'
 
 export function useToken() {
-  const router = useRouter()
   const saveToken = (token) => {
     //guarda el token en local storage para mantener la sesion
     return localStorage.setItem('token', token)
   }
 
   const getToken = () => {
-    //primero verifica si existe token, si no existe lo manda al login, en caso contrario, retorna el token
-    if (!localStorage.getItem('token')) {
-      router.push('/login')
-    } else {
-      return localStorage.getItem('token')
-    }
+    return localStorage.getItem('token')
   }
 
   const signOut = () => {

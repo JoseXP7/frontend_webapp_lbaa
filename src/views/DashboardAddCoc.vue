@@ -14,6 +14,7 @@ const { getToken } = useToken()
 let cedula = ref('')
 let nombres = ref('')
 let apellidos = ref('')
+let isLoading = ref(false)
 
 const addCocinero = async () => {
   if (cedula.value == '' || nombres.value == '' || apellidos.value == '') {
@@ -24,12 +25,13 @@ const addCocinero = async () => {
     })
   } else {
     try {
+      isLoading.value = true
       await api.post(
         '/cocineros',
         {
           cedula: Number(cedula.value),
-          nombres: nombres.value,
-          apellidos: apellidos.value,
+          nombres: nombres.value.toUpperCase(),
+          apellidos: apellidos.value.toUpperCase(),
         },
         {
           headers: {
@@ -51,6 +53,8 @@ const addCocinero = async () => {
         title: 'Error',
         text: `${error.response.data.body}`,
       })
+    } finally {
+      isLoading.value = false
     }
   }
 }
@@ -75,7 +79,7 @@ onMounted(() => {
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Rellene los campos:</h5>
-              <form @submit.prevent="onSubmit">
+              <form @submit.prevent="onSubmit" autocomplete="off">
                 <div>
                   <label class="form-label" for="cedula">Cedula</label>
                   <input
@@ -110,7 +114,11 @@ onMounted(() => {
                   />
                 </div>
                 <div class="mt-4 d-grid">
-                  <button class="btn btn-primary" @click="addCocinero">
+                  <button
+                    class="btn btn-primary"
+                    @click="addCocinero"
+                    :disabled="isLoading"
+                  >
                     Agregar
                   </button>
                 </div>

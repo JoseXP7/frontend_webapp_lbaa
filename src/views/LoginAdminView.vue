@@ -28,9 +28,10 @@ const login = async () => {
       timer: 3500,
     })
     saveToken(data.body.token)
-    saveUser(data.body.userId)
+    await saveUser(data.body.userId, data.body.rol)
     router.push('/dashboard')
   } catch (error) {
+    console.log(error)
     Swal.fire({
       icon: 'error',
       title: 'Error',
@@ -81,6 +82,7 @@ const login = async () => {
                   <form
                     class="row g-3 needs-validation"
                     @submit.prevent="onSubmit"
+                    autocomplete="off"
                   >
                     <div class="col-12">
                       <label for="yourUsername" class="form-label"

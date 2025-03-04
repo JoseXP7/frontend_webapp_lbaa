@@ -1,5 +1,26 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { useToken } from '@/assets/composables/useToken'
+const { getToken } = useToken()
+
+const isAuth = (to, from, next) => {
+  const token = getToken()
+  if (!token) {
+    //redirigir al login cuando no esta logueado
+    next({ name: 'login' })
+  } else {
+    next()
+  }
+}
+
+const isLoginAuth = (to, from, next) => {
+  const token = getToken()
+  if (token) {
+    next({ name: 'dashboard' })
+  } else {
+    next()
+  }
+}
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,12 +47,21 @@ const router = createRouter({
       component: () => import('../views/SectionsView.vue'),
     },
     {
+      path: '/contact',
+      name: 'contact',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/ContactView.vue'),
+    },
+    {
       path: '/login',
       name: 'login',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/LoginAdminView.vue'),
+      beforeEnter: isLoginAuth,
     },
     {
       path: '/dashboard',
@@ -40,6 +70,25 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/DashboardView.vue'),
+      beforeEnter: isAuth,
+    },
+    {
+      path: '/myprofile',
+      name: 'myprofile',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/DashboardProfile.vue'),
+      beforeEnter: isAuth,
+    },
+    {
+      path: '/createUser',
+      name: 'createUser',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/DashboardCreateUser.vue'),
+      beforeEnter: isAuth,
     },
     {
       path: '/studentsList',
@@ -48,6 +97,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/DashboardListSt.vue'),
+      beforeEnter: isAuth,
     },
     {
       path: '/addStudent',
@@ -56,6 +106,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/DashboardAddSt.vue'),
+      beforeEnter: isAuth,
     },
     {
       path: '/uptStudent',
@@ -64,6 +115,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/DashboardUptSt.vue'),
+      beforeEnter: isAuth,
     },
     {
       path: '/sectionsList',
@@ -72,6 +124,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/DashboardListSec.vue'),
+      beforeEnter: isAuth,
     },
     {
       path: '/addSection',
@@ -80,6 +133,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/DashboardAddSec.vue'),
+      beforeEnter: isAuth,
     },
     {
       path: '/adminList',
@@ -88,6 +142,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/DashboardListAdm.vue'),
+      beforeEnter: isAuth,
     },
     {
       path: '/obrerosList',
@@ -96,6 +151,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/DashboardListObr.vue'),
+      beforeEnter: isAuth,
     },
     {
       path: '/docentesList',
@@ -104,6 +160,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/DashboardListDoc.vue'),
+      beforeEnter: isAuth,
     },
     {
       path: '/vigilantesList',
@@ -112,6 +169,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/DashboardListVig.vue'),
+      beforeEnter: isAuth,
     },
     {
       path: '/cocinerosList',
@@ -120,6 +178,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/DashboardListCoc.vue'),
+      beforeEnter: isAuth,
     },
     {
       path: '/addDocente',
@@ -128,6 +187,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/DashboardAddDoc.vue'),
+      beforeEnter: isAuth,
     },
     {
       path: '/addAdministrativo',
@@ -136,6 +196,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/DashboardAddAdm.vue'),
+      beforeEnter: isAuth,
     },
     {
       path: '/addObrero',
@@ -144,6 +205,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/DashboardAddObr.vue'),
+      beforeEnter: isAuth,
     },
     {
       path: '/addVigilante',
@@ -152,6 +214,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/DashboardAddVig.vue'),
+      beforeEnter: isAuth,
     },
     {
       path: '/addCocinero',
@@ -160,6 +223,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/DashboardAddCoc.vue'),
+      beforeEnter: isAuth,
     },
     {
       path: '/uptDocente',
@@ -168,6 +232,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/DashboardUptDoc.vue'),
+      beforeEnter: isAuth,
     },
     {
       path: '/uptAdministrativo',
@@ -176,6 +241,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/DashboardUptAdm.vue'),
+      beforeEnter: isAuth,
     },
     {
       path: '/uptObrero',
@@ -184,6 +250,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/DashboardUptObr.vue'),
+      beforeEnter: isAuth,
     },
     {
       path: '/uptVigilante',
@@ -192,6 +259,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/DashboardUptVig.vue'),
+      beforeEnter: isAuth,
     },
     {
       path: '/uptCocinero',
@@ -200,6 +268,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/DashboardUptCoc.vue'),
+      beforeEnter: isAuth,
     },
     {
       path: '/uploadTask',
@@ -207,12 +276,76 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/DashboarduploadTask.vue'),
+      component: () => import('../views/DashboardUploadTask.vue'),
+      beforeEnter: isAuth,
+    },
+    {
+      path: '/deleteStudent',
+      name: 'deleteStudent',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/DashboardDelSt.vue'),
+      beforeEnter: isAuth,
+    },
+    {
+      path: '/deleteDocente',
+      name: 'deleteDocente',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/DashboardDelDoc.vue'),
+      beforeEnter: isAuth,
+    },
+    {
+      path: '/deleteAdministrativo',
+      name: 'deleteAdministrativo',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/DashboardDelAdm.vue'),
+      beforeEnter: isAuth,
+    },
+    {
+      path: '/deleteObrero',
+      name: 'deleteObrero',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/DashboardDelObr.vue'),
+      beforeEnter: isAuth,
+    },
+    {
+      path: '/deleteVigilante',
+      name: 'deleteVigilante',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/DashboardDelVig.vue'),
+      beforeEnter: isAuth,
+    },
+    {
+      path: '/deleteCocineros',
+      name: 'deleteCocineros',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/DashboardDelCoc.vue'),
+      beforeEnter: isAuth,
     },
   ],
   scrollBehavior(to, from, savedPosition) {
     return { top: 0 }
   },
+})
+
+router.beforeEach((to, from, next) => {
+  const isMobileNavActive =
+    document.body.classList.contains('mobile-nav-active')
+  if (isMobileNavActive) {
+    document.body.classList.remove('mobile-nav-active')
+  }
+  next()
 })
 
 export default router

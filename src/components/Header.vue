@@ -28,7 +28,7 @@ const toggleMobileNav = () => {
           </li>
           <li><RouterLink to="/about">Sobre nosotros</RouterLink></li>
           <li><RouterLink to="/sections">Secciones</RouterLink></li>
-          <li><RouterLink to="/">Contacto</RouterLink></li>
+          <li><RouterLink to="/contact">Contacto</RouterLink></li>
         </ul>
         <i
           :class="[

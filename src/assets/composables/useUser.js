@@ -1,11 +1,17 @@
 import api from '../../config/api'
-import Swal from 'sweetalert2'
 
 export function useUser() {
-  const saveUser = async (userId) => {
+  const saveUser = async (userId, rol) => {
     const user = await api.get(`/usuarios/${userId}`)
+
+    const dataUser = {
+      id: user.data.body[0].id,
+      nombre: user.data.body[0].nombre,
+      activo: user.data.body[0].activo,
+      rol: rol,
+    }
     //guarda el usuario en local storage y convertirlo a JSON
-    return localStorage.setItem('user', JSON.stringify(user.data.body))
+    return localStorage.setItem('user', JSON.stringify(dataUser))
   }
 
   const getUser = () => {

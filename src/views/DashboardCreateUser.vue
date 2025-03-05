@@ -14,7 +14,7 @@ const userData = getUser()
 let usuarios = ref([])
 let uqUser = ref([])
 let uqnombre = ref('')
-let uqestado = ref('')
+let uqestado = ref(0)
 let uqusuario = ref('')
 let uqpassword = ref('')
 let uqrol = ref('')
@@ -134,41 +134,61 @@ const getUniqueUserModal = async (id) => {
 }
 
 const updateUser = async (id) => {
-  try {
-    const response = await api.put(
-      `/usuarios`,
-      {
-        id: id,
-        nombre: uqnombre.value,
-        activo: uqestado.value,
-        usuario: uqusuario.value,
-        password: uqpassword.value,
-        rol: uqrol.value,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${getToken()}`,
-        },
-      }
-    )
-    Swal.fire({
-      icon: 'success',
-      title: 'Usuario Actualizado',
-      text: response.data.body,
-    })
-    getUsuarios()
-  } catch (error) {
+  if (
+    uqnombre.value == '' ||
+    uqusuario.value === '' ||
+    uqpassword.value == '' ||
+    uqrol.value == ''
+  ) {
     Swal.fire({
       icon: 'error',
-      title: 'Error al actualizar',
-      text: error,
+      title: 'Error',
+      text: 'Todos los campos son obligatorios',
+      showConfirmButton: false,
+      timer: 3500,
     })
+  } else {
+    try {
+      const response = await api.put(
+        `/usuarios`,
+        {
+          id: id,
+          nombre: uqnombre.value,
+          activo: uqestado.value,
+          usuario: uqusuario.value,
+          password: uqpassword.value,
+          rol: uqrol.value,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
+        }
+      )
+      Swal.fire({
+        icon: 'success',
+        title: 'Usuario Actualizado',
+        text: response.data.body,
+      })
+      uqnombre.value = ''
+      uqestado.value = 0
+      uqusuario.value = ''
+      uqpassword.value = ''
+      uqrol.value = ''
+      getUsuarios()
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al actualizar',
+        text: error,
+      })
+    }
   }
 }
 
 const clear = () => {
   uqnombre.value = ''
-  uqestado.value = ''
+  uqestado.value = 0
   uqusuario.value = ''
   uqpassword.value = ''
   uqrol.value = ''
@@ -268,6 +288,10 @@ onMounted(() => {
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Lista de Usuarios</h5>
+              <p>
+                Despues de crear un usuario, puedes modificarlo en la siguiente
+                tabla.
+              </p>
               <table class="table table-bordered">
                 <thead>
                   <tr>
@@ -345,12 +369,15 @@ onMounted(() => {
                 </li>
                 <li class="list-group-item">
                   Estado:
-                  <input
-                    class="form-control"
-                    type="text"
+                  <select
+                    class="form-select"
                     v-model="uqestado"
-                    autocomplete="off"
-                  />
+                    name="uqestado"
+                    id="uqestado"
+                  >
+                    <option value="1">Activo</option>
+                    <option value="0">Inactivo</option>
+                  </select>
                 </li>
                 <li class="list-group-item">
                   Usuario:

@@ -304,6 +304,24 @@ const userData = getUser()
           <span>Subir Guía</span>
         </RouterLink>
       </li>
+      <li
+        class="nav-item"
+        v-if="userData.rol === 'supersu' || user.Data.rol === 'admin'"
+      >
+        <RouterLink class="nav-link collapsed" to="/uploadProject">
+          <i class="bi bi-file-earmark-arrow-up"></i>
+          <span>Subir Proyectos</span>
+        </RouterLink>
+      </li>
+      <li
+        class="nav-item"
+        v-if="userData.rol === 'supersu' || user.Data.rol === 'admin'"
+      >
+        <RouterLink class="nav-link collapsed" to="/uptProject">
+          <i class="bi bi-file-earmark-arrow-up"></i>
+          <span>Actualizar Proyectos</span>
+        </RouterLink>
+      </li>
       <li class="nav-item" v-if="userData.rol === 'supersu'">
         <RouterLink class="nav-link collapsed" to="/createUser">
           <i class="bi bi-person-plus"></i>

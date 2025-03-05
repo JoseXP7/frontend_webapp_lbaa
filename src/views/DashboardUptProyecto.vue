@@ -10,61 +10,42 @@ import Swal from 'sweetalert2'
 
 const { getToken } = useToken()
 
-let administrativos = ref([])
-let uqAdmin = ref([])
+let proyectos = ref([])
+let uqProyecto = ref([])
+let url = ref('')
+let nombre = ref('')
+let categoria = ref('')
 
-let search = ref('')
-let cedula = ref('')
-let nombres = ref('')
-let apellidos = ref('')
-
-const getAdministrativos = async () => {
+const getProyectos = async () => {
   try {
-    const response = await api.get('/administrativos')
-    administrativos.value = response.data.body
+    const response = await api.get('/proyectos')
+    proyectos.value = response.data.body
   } catch (error) {
     console.log(error)
   }
 }
 
-const getUnAdmin = async () => {
-  if (search.value == '') {
-    Swal.fire({
-      icon: 'error',
-      title: 'Campo Vacío',
-      text: 'Por favor, ingrese una cédula',
-    })
-  } else {
-    try {
-      const response = await api.get(`/administrativos/${Number(search.value)}`)
-      administrativos.value = response.data.body
-    } catch (error) {
-      console.log(error)
-    }
-  }
-}
-
-const getUniqueAdmModal = async (ci) => {
+const getUniqueProModal = async (id) => {
   try {
-    const response = await api.get(`/administrativos/${ci}`)
-    uqAdmin.value = response.data.body
-    cedula.value = response.data.body[0].cedula
-    nombres.value = response.data.body[0].nombres
-    apellidos.value = response.data.body[0].apellidos
+    const response = await api.get(`/proyectos/${id}`)
+    uqProyecto.value = response.data.body
+    url.value = response.data.body[0].url
+    nombre.value = response.data.body[0].nombre
+    categoria.value = response.data.body[0].categoria
   } catch (error) {
     console.log(error)
   }
 }
 
-const updateAdministrativo = async (id) => {
+const updateProyecto = async (id) => {
   try {
     const response = await api.put(
-      `/administrativos`,
+      `/proyectos`,
       {
         id: id,
-        cedula: cedula.value,
-        nombres: nombres.value,
-        apellidos: apellidos.value,
+        url: url.value,
+        nombre: nombre.value,
+        categoria: categoria.value,
       },
       {
         headers: {
@@ -74,10 +55,10 @@ const updateAdministrativo = async (id) => {
     )
     Swal.fire({
       icon: 'success',
-      title: 'Administrativo Actualizado',
+      title: 'Proyecto Actualizado',
       text: response.data.body,
     })
-    getAdministrativos()
+    getProyectos()
   } catch (error) {
     Swal.fire({
       icon: 'error',
@@ -88,16 +69,15 @@ const updateAdministrativo = async (id) => {
 }
 
 const clear = () => {
-  search.value = ''
-  cedula.value = ''
-  nombres.value = ''
-  apellidos.value = ''
-  getAdministrativos()
+  url.value = ''
+  nombre.value = ''
+  categoria.value = ''
+  getProyectos()
 }
 
 onMounted(() => {
   getToken()
-  getAdministrativos()
+  getProyectos()
 })
 </script>
 
@@ -106,25 +86,11 @@ onMounted(() => {
   <SidebarDashboard />
   <main id="main" class="main">
     <div class="pagetitle">
-      <h1>Actualizar Administrativos</h1>
+      <h1>Actualizar Proyectos</h1>
     </div>
     <!-- End Page Title -->
 
     <section class="section">
-      <div class="d-flex align-items-center gap-2 mb-3">
-        <input
-          class="form-control w-25"
-          type="text"
-          v-model="search"
-          placeholder="Buscar por cedula"
-        />
-        <button class="btn btn-primary" @click="getUnAdmin">
-          <i class="bi bi-search"></i>
-        </button>
-        <button class="btn btn-secondary" @click="clear">
-          <i class="bi bi-x"></i>
-        </button>
-      </div>
       <div class="row">
         <div class="col-lg-8">
           <div class="card">
@@ -133,20 +99,21 @@ onMounted(() => {
               <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <th>C.I</th>
-                    <th>Nombres</th>
-                    <th>Apellidos</th>
+                    <th>ID</th>
+                    <th>URL</th>
+                    <th>Nombre</th>
+                    <th>Categoria</th>
                     <th>Acción</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr
-                    v-for="administrativo in administrativos"
-                    :key="administrativo.id"
-                  >
-                    <td>{{ administrativo.cedula }}</td>
-                    <td>{{ administrativo.nombres }}</td>
-                    <td>{{ administrativo.apellidos }}</td>
+                  <tr v-for="proyecto in proyectos" :key="proyecto.id">
+                    <td>{{ proyecto.id }}</td>
+                    <td>
+                      <a :href="proyecto.url">{{ proyecto.url }}</a>
+                    </td>
+                    <td>{{ proyecto.nombre }}</td>
+                    <td>{{ proyecto.categoria }}</td>
                     <td>
                       <div
                         class="d-flex align-content-center justify-content-center"
@@ -155,7 +122,7 @@ onMounted(() => {
                           class="btn btn-info"
                           data-bs-toggle="modal"
                           data-bs-target="#exampleModal"
-                          @click="getUniqueAdmModal(administrativo.cedula)"
+                          @click="getUniqueProModal(proyecto.id)"
                         >
                           <i class="bi bi-pencil"></i>
                         </button>
@@ -193,38 +160,34 @@ onMounted(() => {
           </div>
           <div class="modal-body">
             <div col-4>
-              <ul
-                class="list-group"
-                v-for="administrativo in uqAdmin"
-                :key="administrativo.id"
-              >
+              <ul class="list-group" v-for="pro in uqProyecto" :key="pro.id">
                 <li class="list-group-item">
-                  <h4>ID: {{ administrativo.id }}</h4>
+                  <h4>ID: {{ pro.id }}</h4>
                 </li>
                 <li class="list-group-item">
-                  Cedula:
+                  URL:
                   <input
                     class="form-control"
                     type="text"
-                    v-model="cedula"
+                    v-model="url"
                     autocomplete="off"
                   />
                 </li>
                 <li class="list-group-item">
-                  Nombres:
+                  Nombre:
                   <input
                     class="form-control"
                     type="text"
-                    v-model="nombres"
+                    v-model="nombre"
                     autocomplete="off"
                   />
                 </li>
                 <li class="list-group-item">
-                  Apellidos:
+                  Categoria:
                   <input
                     class="form-control"
                     type="text"
-                    v-model="apellidos"
+                    v-model="categoria"
                     autocomplete="off"
                   />
                 </li>
@@ -240,7 +203,7 @@ onMounted(() => {
                   <button
                     type="button"
                     class="btn btn-primary"
-                    @click="updateAdministrativo(administrativo.id)"
+                    @click="updateProyecto(pro.id)"
                     data-bs-dismiss="modal"
                   >
                     Actualizar

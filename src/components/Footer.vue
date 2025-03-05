@@ -21,12 +21,12 @@ import { RouterLink } from 'vue-router'
               <strong>Correo:</strong> <span>lbantonioalamo@gmail.com</span>
             </p>
           </div>
-          <div class="social-links d-flex mt-4">
+          <!-- <div class="social-links d-flex mt-4">
             <a href=""><i class="bi bi-twitter-x"></i></a>
             <a href=""><i class="bi bi-facebook"></i></a>
             <a href=""><i class="bi bi-instagram"></i></a>
             <a href=""><i class="bi bi-linkedin"></i></a>
-          </div>
+          </div> -->
         </div>
 
         <div class="col-lg-2 col-md-3 footer-links">
@@ -47,9 +47,7 @@ import { RouterLink } from 'vue-router'
         <strong class="px-1 sitename">L.B Antonio Alamo</strong>
         <span>Todos los derechos reservados</span>
       </p>
-      <div class="credits">
-        Diseñado por <a href="https://bootstrapmade.com/">Promo XX</a>
-      </div>
+      <div class="credits">Diseñado por <a href="#">Promo XX</a></div>
     </div>
   </footer>
 </template>

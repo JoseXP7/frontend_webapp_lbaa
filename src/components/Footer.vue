@@ -47,7 +47,7 @@ import { RouterLink } from 'vue-router'
         <strong class="px-1 sitename">L.B Antonio Alamo</strong>
         <span>Todos los derechos reservados</span>
       </p>
-      <div class="credits">Diseñado por <a href="#">Promo XX</a></div>
+      <div class="credits">Diseñado por <a href="#">Promo XLIV</a></div>
     </div>
   </footer>
 </template>

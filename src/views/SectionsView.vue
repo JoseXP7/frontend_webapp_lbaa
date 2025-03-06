@@ -1,10 +1,19 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import { ref, onMounted } from 'vue'
+import { useSeoMeta } from '@unhead/vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 
 import api from '../config/api'
+
+useSeoMeta({
+  title: 'Secciones',
+  description:
+    'Información clave para estudiantes y sus guías en L.B. Antonio Álamo. Accede a recursos, guías, para tu desarrollo académico.',
+  keywords:
+    'L.B Antonio Álamo, estudiantes, secciones, guías, recursos educativos, desarrollo académico',
+})
 
 let estudSeccion = ref([])
 let secciones = ref([])

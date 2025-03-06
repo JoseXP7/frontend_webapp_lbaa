@@ -1,10 +1,19 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import { ref, onMounted } from 'vue'
+import { useSeoMeta } from '@unhead/vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 
 import api from '../config/api'
+
+useSeoMeta({
+  title: 'Proyectos',
+  description:
+    'Descubre los proyectos innovadores del Liceo Bolivariano Antonio Álamo. Impulsando el desarrollo y aprendizaje a través de iniciativas creativas.',
+  keywords:
+    'L.B Antonio Álamo, innovación educativa, desarrollo estudiantil, iniciativas, aprendizaje creativo',
+})
 
 let proyectos = ref([])
 let search = ref('')

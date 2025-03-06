@@ -1,10 +1,15 @@
 <script setup>
 import { useToken } from '../assets/composables/useToken'
 import { onMounted } from 'vue'
+import { useHead } from '@unhead/vue'
 import HeaderDashboard from '@/components/HeaderDashboard.vue'
 import SidebarDashboard from '@/components/SidebarDashboard.vue'
 
 const { getToken } = useToken()
+
+useHead({
+  title: 'Dashboard',
+})
 
 onMounted(() => {
   getToken()

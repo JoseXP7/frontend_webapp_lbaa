@@ -1,7 +1,15 @@
 <script setup>
 import { RouterLink } from 'vue-router'
+import { useSeoMeta } from '@unhead/vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
+
+useSeoMeta({
+  title: 'Sobre nosotros',
+  description:
+    'Conoce la historia, misión y visión del Liceo Bolivariano Antonio Álamo. Descubre nuestro compromiso con la educación.',
+  keywords: 'L.B. Antonio Álamo, historia , misión, visión, educación',
+})
 </script>
 
 <template>

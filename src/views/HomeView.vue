@@ -1,9 +1,18 @@
 <script setup>
 import { RouterLink } from 'vue-router'
+import { useSeoMeta } from '@unhead/vue'
 import Header from '../components/Header.vue'
 import Counters from '@/components/Counters.vue'
 import Courses from '@/components/Courses.vue'
 import Footer from '@/components/Footer.vue'
+
+useSeoMeta({
+  title: 'L.B Antonio Álamo',
+  description:
+    'Somos una institución educativa que ofrece información sobre proyectos escolares, guías y actividades académicas.',
+  keywords:
+    'L.B Antonio Álamo, proyectos escolares, docentes, actividades académicas, educación, biografía, historia, misión, visión',
+})
 </script>
 
 <template>

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@srexi/purecounterjs": "^1.5.0",
+    "@unhead/vue": "^2.0.0-beta.2",
     "aos": "^2.3.4",
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",

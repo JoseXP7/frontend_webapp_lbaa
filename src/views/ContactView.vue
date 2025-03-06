@@ -1,7 +1,15 @@
 <script setup>
 import { RouterLink } from 'vue-router'
+import { useSeoMeta } from '@unhead/vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
+
+useSeoMeta({
+  title: 'Contacto',
+  description:
+    '¿Tienes preguntas? Contáctanos. Encuentra aquí nuestros datos de contacto para comunicarte con el Liceo Bolivariano Antonio Álamo.',
+  keywords: 'L.B Antonio Álamo, contacto, teléfono, dirección, correo',
+})
 </script>
 
 <template>

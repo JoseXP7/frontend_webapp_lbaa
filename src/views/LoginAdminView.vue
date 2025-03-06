@@ -1,11 +1,22 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import { ref } from 'vue'
+import { useSeoMeta } from '@unhead/vue'
 import api from '../config/api'
 import { useRouter } from 'vue-router'
 import { useToken } from '../assets/composables/useToken'
 import { useUser } from '../assets/composables/useUser'
 import Swal from 'sweetalert2'
+
+useSeoMeta({
+  title: 'Iniciar Sesión',
+  description:
+    'Accede al panel de administración de L.B. Antonio Álamo. Gestiona contenido, usuarios y configuraciones de la plataforma educativa de forma segura.',
+  keywords:
+    'Acceso administración L.B. Antonio Álamo, login panel, dashboard, gestión web, administrador',
+})
+
+let isLoading = ref(false)
 
 const { saveToken } = useToken()
 const { saveUser } = useUser()
@@ -15,6 +26,7 @@ let username = ref('')
 let password = ref('')
 
 const login = async () => {
+  isLoading.value = true
   try {
     const { data } = await api.post('/auth/login', {
       usuario: username.value,
@@ -38,6 +50,8 @@ const login = async () => {
       text: `${error.response.data.body}`,
     })
     // alert(error.response.data.body)
+  } finally {
+    isLoading.value = false
   }
 }
 </script>
@@ -120,7 +134,11 @@ const login = async () => {
                       </div>
                     </div>
                     <div class="col-12">
-                      <button class="btn btn-primary w-100" @click="login">
+                      <button
+                        class="btn btn-primary w-100"
+                        @click="login"
+                        :disabled="isLoading"
+                      >
                         Acceder
                       </button>
                     </div>
